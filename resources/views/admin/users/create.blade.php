@@ -1,14 +1,14 @@
-@extends('admin.template.main');
+@extends('admin.template.main')
 
-
-@section('sub-title', 'Crear Usuario');
+@section('sub-title', 'Crear Usuario')
 
 @section('content')
+
 
 	{!! Form::open(['route' => 'users.store', 'method' => 'POST']) !!}
 
 		{!! Form::label('nombre', 'Nombre') !!}
-		{!! Form::text('name', null, ['class' => 'form-control', 'placeholder' =>  'Nombre completo', 'required']) !!}
+		{!! Form::text('name', null, ['class' => 'form-control', 'placeholder' =>  'Nombre completo', 'autofocus' => 'autofocus', 'required']) !!}
 		<br>
 		{!! Form::label('email', 'Correo') !!}
 		{!! Form::text('email', null, ['class' => 'form-control', 'placeholder' =>  'example@gmail.com', 'required']) !!}
@@ -17,7 +17,7 @@
 		{!! Form::password('password', ['class' => 'form-control', 'placeholder' => '**********', 'required']) !!}
 		<br>
 		{!! Form::label('type', 'Tipo') !!}	
-		{!! Form::select('type', ['member' => 'Miembro', 'admin' => 'Administrador'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('type', ['member' => 'Miembro', 'admin' => 'Administrador'], null, ['class' => 'form-control', 'placeholder' => 'Seleccione una opcion', 'required']) !!}
 		<br>
 		{!! Form::submit('Registrar', ['class' => 'btn btn-primary']) !!}
 

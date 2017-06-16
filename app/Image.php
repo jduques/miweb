@@ -11,7 +11,7 @@ class Image extends Model
 
     public function article() {
 
-    	return $this->belogsTo('App\Article')
+    	return $this->belongsTo('App\Article');
     }
     
 }

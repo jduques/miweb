@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('articles', function() {
@@ -20,20 +20,26 @@ Route::get('articles', function() {
 });
 
 
-Route::group(['prefix' => 'admin'], function() {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
 
 	Route::resource('users','UsersController');
-	Route::get('users/{id}/destroy',[
-	'uses'  => 'UsersController@destroy',
-	'as'	=> 'users.destroy'
+	Route::get('users/{id}/destroy', 'UsersController@destroy')->name('users.destroy');
 
-	]);
 	Route::resource('categories', 'CategoriesController');
 	Route::get('categories/{id}/destroy', 'CategoriesController@destroy')->name('categories.destroy');
 
-Auth::routes();
+	Route::resource('tags', 'TagsController');
+	Route::get('tags/{id}/destroy', 'TagsController@destroy')->name('tags.destroy');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
+	Route::resource('articles', 'ArticlesController');
+	Route::get('articles/{id}/destroy', 'ArticlesController@destroy')->name('articles.destroy');
 
 });
+
+Auth::routes();
+
+//Route::get('/login', "Auth\LoginController@getLogin")->name('login');
+//Route::post('/login', "MiAuthController@posLogin")->name('login');
+//Route::get('/logout', "MiAuthController@getlogout")->name('logout');
+
+Route::get('/home', 'HomeController@index')->name('index');

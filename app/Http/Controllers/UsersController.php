@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\User;
+use Laracasts\Flash\Flash;
+use App\Http\Requests\UserRequest;
 
 class UsersController extends Controller
 {
@@ -14,9 +16,11 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('id', 'ASC')->paginate(5);
-        
+        $users = User::orderBy('id', 'ASC')->paginate(9);
+
         return view('admin.users.index')->with('users', $users);
+
+        //return view('admin.users.index', ['users' => $users]);
     }
 
     /**
@@ -35,15 +39,13 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         $user = new User($request->all());
         $user->password = bcrypt($request->password);
-        //dd($request->all());
-        //dd($user);
         $user->save();
-        dd('Usuario Guardado!');
-        
+        flash('Se ha registrado ' . $user->name . ' de forma exitosa!')->success()->important();
+        return redirect()->route('users.index');
     }
 
     /**
@@ -65,7 +67,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.users.edit')->with('user', $user);
+
     }
 
     /**
@@ -77,7 +81,11 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $user->fill($request->all());
+        $user->save();
+        flash('El usuario ' . $user->name . ' ha sido editado con exito!')->success()->important();
+        return redirect()->route('users.index');
     }
 
     /**
@@ -88,6 +96,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        flash('El usuario ' . $user->name . ' ha sido borrado!')->error()->important();
+        return redirect()->route('users.index');
     }
 }
